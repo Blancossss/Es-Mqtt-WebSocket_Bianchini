@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 
 #BROKER = "test.mosquitto.org"
 BROKER = "mqtt.ssh.edu.it"  #broker scolastico
-TOPIC = "sensor/humidity"
+TOPIC = "Bianchini/sensor/humidity"
 
 client = mqtt.Client()
 client.connect(BROKER, 1883)
@@ -14,12 +14,12 @@ client.connect(BROKER, 1883)
 print("Sensore simulato avviato")
 
 while True:
-    value = round(random.uniform(18, 30), 2)
+    value = round(random.uniform(40, 60), 1)
 
     payload = {
         "sensor": "humidity",
         "value": value,
-        "unit": "C",#cambiala
+        "unit": "%",#cambiala
         "timestamp": datetime.now().strftime("%H:%M:%S")
     }
 

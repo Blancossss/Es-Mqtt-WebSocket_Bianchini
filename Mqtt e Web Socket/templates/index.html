@@ -6,16 +6,28 @@
 </head>
 <body>
 
-<h1>Dashboard Sensore – Quale sensore vuoi vedere?</h1>
+<h1 id="title" >Dashboard Sensore – Quale sensore vuoi vedere?</h1>
 
-<select name="semsors" id="sensors">--scegli sensore--</select>
-    <option value="start">--Scegli sensore--</option>
+<select name="semsors" id="sensors">
+    <option value=None>--Scegli sensore--</option>
     <option value="temperature">temperature</option>
     <option value="humidity">humidity</option>
     <option value="pressure">pressure</option>
+</select>
+<button type="button" onclick=getType()>Confermo</button>
 
-<button type="button" onclick=type()>Confermo</button>
+<h3>Dati grezzi (MQTT)</h3>
+<pre id="raw">---</pre>
+
+<h3>Dati formattati</h3>
+<p id="formatted">---</p>
+
+
 <script>
+    async function getType(){
+        const sensor = document.getElementById("sensors").value;
+        location.href = sensor+".html" ;
+    }
 </script>
 </body>
 </html>

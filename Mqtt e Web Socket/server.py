@@ -6,8 +6,9 @@ import tornado.web
 import tornado.websocket
 import aiomqtt
 
-BROKER = "test.mosquitto.org"
-TOPIC = "sensor/"
+#BROKER = "test.mosquitto.org"
+BROKER = "mqtt.ssh.edu.it"  #broker scolastico
+#TOPIC = "Bianchini/sensor/"
 
 clients = set()
 
@@ -15,22 +16,22 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
 
-class TempHandler():
+class TempHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("temperature.html")
-        self.TOPIC = TOPIC+"temperature"
+        self.TOPIC = "Bianchini/sensor/temperature"
         asyncio.create_task(mqtt_listener(self.TOPIC))
 
-class HumidityHandler():
+class HumidityHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("humidity.html")
-        self.TOPIC = TOPIC+"humidity"
+        self.TOPIC = "Bianchini/sensor/humidity"
         asyncio.create_task(mqtt_listener(self.TOPIC))
 
-class PressureHandler():
+class PressureHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("pressure.html")
-        self.TOPIC = TOPIC+"pressure"
+        self.TOPIC = "Bianchini/sensor/pressure"
         asyncio.create_task(mqtt_listener(self.TOPIC))
 
 class WSHandler(tornado.websocket.WebSocketHandler):
@@ -46,7 +47,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         clients.remove(self)
 
 
-async def mqtt_listener():
+async def mqtt_listener(TOPIC):
 
     logging.info("Connessione al broker MQTT...")
 
@@ -75,9 +76,10 @@ async def main():
         [
             (r"/", MainHandler),
             (r"/ws", WSHandler),
-            (r"/temperature", TempHandler),
-            (r"/humidity", HumidityHandler),
-            (r"/pressure", PressureHandler),
+            (r"/temperature.html", TempHandler),
+            (r"/humidity.html", HumidityHandler),
+            (r"/pressure.html", PressureHandler),
+            (r"/templates/(.*)", tornado.web.StaticFileHandler, {"path": "templates"}),
         ],
         template_path="templates",
     )
